@@ -1,0 +1,112 @@
+import React, { Component } from "react";
+import Box from "./box.component.js";
+import "bootstrap/dist/css/bootstrap.min.css";
+
+class App extends Component {
+  state = {
+    boxes: [],
+  };
+
+  createBox = () => {
+    const { boxes } = this.state;
+
+    this.setState({ boxes: [...boxes, 0] }); //spread operator
+  };
+
+  onDelete = (id) => {
+
+    function filterArray (number, index) {
+
+      if (id === index) return false;
+
+      else return true;
+
+      const updatedBoxes = this.state.boxes.filter(filterArray);
+
+      this.setState({ boxes: updatedBoxes });
+      
+    }
+  }
+
+  onIncrement = (id) => {
+    const arr = [...this.state.boxes];
+    arr[id]++;
+    this.setState({ boxes: arr });
+  }
+
+  onDecrement = (id) => {
+    const arr = [...this.state.boxes];
+    arr[id]--;
+
+    this.setState({ boxes: arr });
+  }
+
+  render() {
+    return (
+      <div style={{ margin: "20px" }}>
+        <button className="btn btn-primary p-2" onClick={this.createBox}>
+          Add New Box
+        </button>
+        <br />
+        <br />
+
+        {this.state.boxes.map((number, index) => (
+          <div key={index}>
+            <Box
+              num={number}
+              id={index}
+              onDelete={this.onDelete}
+              onIncrement={this.onIncrement}
+              onDecrement={this.onDecrement}
+            />
+
+            <br />
+          </div>
+        ))}
+      </div>
+    );
+  }
+}
+
+export default App;
+
+----------------------------------------------------------------------------------------------------
+import React, { Component } from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
+
+class Box extends Component {
+  state = {
+    className: "btn btn-danger p-2"
+  }
+
+  // constructor(props) {
+  //   super(props);
+  // }
+
+  increment = () => { this.props.onIncrement(this.props.id); }
+
+  decrement = () => { this.props.onDecrement(this.props.id) ;}
+
+  delete = () => {
+    console.log("Check to delete");
+    const { id } = this.props;
+    this.props.onDelete(id);
+  }
+
+  render() {
+    return (
+      <div>
+        <button type="button"className={this.state.className} onClick={this.decrement}> Decrement</button>
+
+        <span style={{ fontSize: "20px" }} className="p-3">{ this.props.num }</span>
+
+        <button type="button"className="btn btn-primary p-2"onClick={ this.increment }>Increment</button>
+
+        <button type="button"className="btn btn-danger p-2 ms-2"onClick={ this.delete }>Delete</button>
+
+      </div>
+    );
+  }
+}
+
+export default Box;
